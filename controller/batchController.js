@@ -75,7 +75,7 @@ export const updateBatch = async (req, res) => {
       { new: true }
     );
 
-    if (!updated) {
+    if (!updated){
       return res.status(404).json({ message: "Batch not found" });
     }
 
