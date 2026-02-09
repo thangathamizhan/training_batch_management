@@ -28,10 +28,7 @@ const trainerSchema = new mongoose.Schema(
       type: Number,
       required: true
     }, 
-    skillset: {
-      type: [String], 
-      required: true
-    },
+    
   },
   { timestamps: true }
 );

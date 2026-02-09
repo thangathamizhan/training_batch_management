@@ -8,25 +8,16 @@ export const createTrainer = async (req, res) => {
       email,
       password,
       phoneNumber,
-      skillSet,
       skills,        
       proficiency,
       experience
     } = req.body;
 
   
-    if (
-      !trainerName ||
-      !email ||
-      !password ||
-      !phoneNumber ||
-      !skillSet ||
-      !skills ||
-      !proficiency ||
-      !experience
+    /*if (!trainerName ||!email ||!password ||!phoneNumber ||!skills ||!proficiency ||!experience
     ) {
       return res.status(400).json({ message: "All fields are required" });
-    }
+    }*/
 
     
     const existingUser = await userSchema.findOne({ email });
@@ -50,7 +41,7 @@ export const createTrainer = async (req, res) => {
       skillS: skills,          
       proficiency,
       experience,
-      skillset: skillSet     
+          
     });
 
     res.status(201).json({
@@ -159,7 +150,7 @@ export const updateTrainer = async (req, res) => {
       email,
       password,
       phoneNumber,
-      skillSet,
+      
       skills,
       proficiency,
       experience
@@ -188,7 +179,7 @@ export const updateTrainer = async (req, res) => {
       id,
       {
         ...(skills && { skillS: skills }),
-        ...(skillSet && { skillset: skillSet }),
+      
         ...(proficiency && { proficiency }),
         ...(experience && { experience })
       },

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Dashboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- CSS Link -->
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+     <script src="script.js"></script>
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <h2>ADMIN</h2>
+        <ul>
+            <li onclick="loadForm('dashboard')">Dashboard</li>
+            <li onclick="loadForm('trainer')">Trainer</li>
+            <li onclick="loadForm('course')">Course</li>
+            <li onclick="loadForm('trainee')">Trainee</li>
+            <li onclick="loadForm('skill')">Skill</li>
+            <li onclick="loadForm('batch')">Batch</li>
+            <li class="logout-item" onclick="window.location.href='indexhome.html'">Logout</li>
+        </ul>
+    </div>
+     <!-- Main Content -->
+     <div class="main">
+
+    <!-- Navbar -->
+    <div class="navbar">
+    <span class="menu-btn" id="menuBtn">☰</span>
+        <h2 id="pageTitle">Dashboard</h2>
+        <!-- <input type="text" placeholder="Search..." /> -->
+    </div>
+    <div id="content-area"></div>
+    </div>
+
+    <!-- JS Link -->
+  
+</body>
+</html>

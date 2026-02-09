@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Java Full Stack Developer Course</title>
+
+ 
+  <link rel="icon" href="./logo.png" type="image/png">
+
+  <link rel="stylesheet" href="./java.css">
+</head>
+<body>
+
+
+<section class="hero">
+  <div class="overlay">
+    <h1>Java Full Stack Developer Course</h1>
+    <p class="meta">Duration: 6 Months | Price: ₹45,000</p>
+    <button onclick="openForm()">Enroll Now</button>
+  </div>
+</section>
+
+
+<section class="section">
+  <h2>Course Overview</h2>
+  <p>
+    This Java Full Stack Developer course provides comprehensive training in both
+    frontend and backend application development using industry-relevant technologies.
+    Learners gain strong fundamentals in Core Java, Advanced Java and real-time
+    project exposure to become job-ready developers.
+  </p>
+</section>
+
+<section class="section dark">
+  <h2>Course Syllabus</h2>
+
+  <div class="module">
+    <h3>Module 1: Core Java</h3>
+    <p>OOP concepts, collections, multithreading, exception handling</p>
+  </div>
+
+  <div class="module">
+    <h3>Module 2: Advanced Java</h3>
+    <p>JDBC, Servlets, JSP, MVC architecture</p>
+  </div>
+
+  <div class="module">
+    <h3>Module 3: Frontend</h3>
+    <p>HTML5, CSS3, JavaScript</p>
+  </div>
+
+  <div class="module">
+    <h3>Module 4: Spring Boot</h3>
+    <p>REST APIs, dependency injection</p>
+  </div>
+
+  <div class="module">
+    <h3>Module 5: Database</h3>
+    <p>SQL, CRUD operations, integration</p>
+  </div>
+</section>
+
+
+<section class="section">
+  <h2>Course Highlights</h2>
+
+  <div class="syllabus-item">Industry-oriented curriculum</div>
+  <div class="syllabus-item">Hands-on real-time projects</div>
+  <div class="syllabus-item">Interview & placement support</div>
+</section>
+
+<section class="section dark">
+  <h2>Who Can Enroll</h2>
+  <p>
+    Fresh graduates, final-year students, career switchers,
+    and working professionals.
+  </p>
+</section>
+
+
+<div class="popup" id="formPopup">
+  <div class="form-box">
+    <span class="close" onclick="closeForm()">×</span>
+    <h2>Course Enrollment Form</h2>
+
+    <form onsubmit="redirectPage(event)">
+      <input type="text" placeholder="Full Name" required>
+      <input type="email" placeholder="Email" required>
+      <input type="tel" placeholder="Phone Number" required>
+
+      <select required>
+        <option value="">Select Gender</option>
+        <option>Male</option>
+        <option>Female</option>
+        <option>Other</option>
+      </select>
+
+      <input type="text" placeholder="Qualification" required>
+      <input type="text" placeholder="Address" required>
+      <button type="submit">Submit</button>
+    </form>
+  </div>
+</div>
+
+<script src="./java.js"></script>
+</body>
+</html>
