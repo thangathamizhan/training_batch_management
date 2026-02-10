@@ -71,20 +71,20 @@
   </p>
 </section>
 
-<!-- POPUP FORM -->
+<!-- ================= POPUP FORM ================= -->
 <div class="popup" id="formPopup">
   <div class="form-box">
     <span class="close" onclick="closeForm()">×</span>
     <h2>Course Enrollment Form</h2>
 
     <form onsubmit="redirectPage(event)">
+      
       <input 
         type="text" 
         id="fullName" 
         placeholder="Full Name" 
         required 
-        onfocus="autoFillName()" 
-        onchange="autoFillName()"
+        onfocus="autoFillName()"
       >
 
       <input 
@@ -92,8 +92,7 @@
         id="email" 
         placeholder="Email" 
         required
-        onfocus="autoFillEmail()" 
-        onchange="autoFillEmail()"
+        onfocus="autoFillEmail()"
       >
 
       <input 
@@ -101,19 +100,18 @@
         id="phone" 
         placeholder="Phone Number" 
         required
-        onfocus="autoFillPhone()" 
-        onchange="autoFillPhone()"
+        onfocus="autoFillPhone()"
       >
-                   
-      <select required>
+
+      <select id="gender" required>
         <option value="">Select Gender</option>
-        <option>Male</option>
-        <option>Female</option>
-        <option>Other</option>
+        <option value="Male">Male</option>
+        <option value="Female">Female</option>
+        <option value="Other">Other</option>
       </select>
 
-      <input type="text" placeholder="Qualification" required>
-      <input type="text" placeholder="Address" required>
+      <input type="text" id="qualification" placeholder="Qualification" required>
+      <input type="text" id="address" placeholder="Address" required>
 
       <button type="submit">Submit</button>
     </form>
@@ -121,19 +119,14 @@
   </div>
 </div>
 
+<!-- ================= JS ================= -->
 <script>
 /* =========================
-   POPUP + COURSE ID LOGIC
+   COURSE ID + POPUP
 ========================= */
 function openForm() {
-
-  // ✅ STORE COURSE ID
   localStorage.setItem("courseId", "6989bdd57bc96536198a39b3");
-
-  console.log("Course ID stored:", localStorage.getItem("courseId"));
-
   document.getElementById("formPopup").style.display = "flex";
-  autoFillAll();
 }
 
 function closeForm() {
@@ -142,72 +135,98 @@ function closeForm() {
 
 window.onclick = function (event) {
   const popup = document.getElementById("formPopup");
-  if (event.target === popup) {
-    closeForm();
-  }
+  if (event.target === popup) closeForm();
 };
 
-function redirectPage(event) {
-  event.preventDefault();
-  window.location.href = "login.html";
+/* =========================
+   STORAGE HELPERS
+========================= */
+function getToken() {
+  return localStorage.getItem("token"); // JWT string
+}
+
+function getUser() {
+  const userStr = localStorage.getItem("user"); // user object
+  if (!userStr) return null;
+  return JSON.parse(userStr);
 }
 
 /* =========================
-   USER / TOKEN FETCH LOGIC
+   AUTO FILL (ON FOCUS)
 ========================= */
-
-function getUserFromStorage() {
-  const data = localStorage.getItem("user");
-  if (!data) return null;
-
-  try {
-    return JSON.parse(data);
-  } catch (e) {
-    return decodeJWT(data);
-  }
-}
-
-/* JWT Decoder */
-function decodeJWT(token) {
-  try {
-    const payload = token.split(".")[1];
-    const decoded = atob(payload);
-    return JSON.parse(decoded);
-  } catch (e) {
-    return null;
-  }
-}
-
-/* Auto Fill Functions */
 function autoFillName() {
-  const user = getUserFromStorage();
+  const user = getUser();
   if (!user) return;
-
-  document.getElementById("fullName").value =
-    user.userName || user.name || user.fullName || "";
+  document.getElementById("fullName").value = user.name || user.userName || "";
 }
 
 function autoFillEmail() {
-  const user = getUserFromStorage();
+  const user = getUser();
   if (!user) return;
-
-  document.getElementById("email").value =
-    user.email || "";
+  document.getElementById("email").value = user.email || "";
 }
 
 function autoFillPhone() {
-  const user = getUserFromStorage();
+  const user = getUser();
   if (!user) return;
-
-  document.getElementById("phone").value =
-    user.phoneNumber || user.phone || "";
+  document.getElementById("phone").value = user.phoneNumber || user.phone || "";
 }
 
-/* Auto fill all */
-function autoFillAll() {
-  autoFillName();
-  autoFillEmail();
-  autoFillPhone();
+/* =========================
+   FORM SUBMIT
+========================= */
+async function redirectPage(event) {
+  event.preventDefault();
+
+  const user = getUser();       
+  const token = getToken();     
+  const courseId = localStorage.getItem("courseId");
+
+  if (!user || !token) {
+    alert("Login required");
+    return;
+  }
+
+  const gender = document.getElementById("gender").value;
+  const qualification = document.getElementById("qualification").value;
+  const address = document.getElementById("address").value;
+
+  const payload = {
+    trainee_id: user.id,   // ✅ userId
+    qualification,
+    gender,
+    address,
+    courseId
+  };
+
+  console.log("Sending payload:", payload);
+
+  try {
+    const res = await fetch("http://localhost:5000/api/trainee/applycourse/createTrainee", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`   // ✅ JWT auth
+      },
+      body: JSON.stringify(payload)
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      console.error("Backend error:", data);
+      alert(data.message || "Failed");
+      return;
+    }
+
+    alert("✅ Course applied successfully");
+    closeForm();
+    console.log("SUCCESS:", data);
+
+  } catch (err) {
+    console.error("Fetch error:", err);
+    alert("Server error");
+  }
 }
 </script>
 

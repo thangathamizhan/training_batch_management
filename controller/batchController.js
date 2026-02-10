@@ -8,6 +8,13 @@ export const createBatch = async (req, res) => {
     if (!batchName || !startDate || !endDate || !mode || !trainerId || !courseId) {
       return res.status(400).json({ message: "Must fill all the fields" });
     }
+    console.log("batchname",batchName);
+    console.log("startDate",startDate);
+    console.log("endDate",endDate);
+    console.log("mode",mode);
+    console.log("trainerId",trainerId);
+    console.log("courseId",courseId);
+    
 
     const existing = await Batch.findOne({ batchName });
     if (existing) {

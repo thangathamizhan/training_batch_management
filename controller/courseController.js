@@ -1,5 +1,6 @@
-
+import mongoose from "mongoose";
 import { course } from "../model/courseSchema.js";
+
 
 
 
@@ -9,9 +10,7 @@ export const createCourse = async (req, res) => {
 
     // validation
     if (!courseName || !description || !duration || !level || !skills || skills.length === 0) {
-      return res.status(400).json({
-        message: "Please fill all fields including skills",
-      });
+      return res.status(400).json({ message: "Please fill all fields including skills" });
     }
 
     // check duplicate course
@@ -21,14 +20,9 @@ export const createCourse = async (req, res) => {
     }
 
     // validate skill ObjectIds
-    const validSkills = skills.every(id =>
-      mongoose.Types.ObjectId.isValid(id)
-    );
-
+    const validSkills = skills.every(id => mongoose.Types.ObjectId.isValid(id));
     if (!validSkills) {
-      return res.status(400).json({
-        message: "Invalid skill IDs",
-      });
+      return res.status(400).json({ message: "Invalid skill IDs" });
     }
 
     // create course
@@ -44,7 +38,9 @@ export const createCourse = async (req, res) => {
       message: "Course created successfully",
       data: courseDetails,
     });
+
   } catch (error) {
+    console.error("Create Course Error:", error);
     res.status(500).json({
       message: "Server error",
       error: error.message,
@@ -82,7 +78,7 @@ export const getSingleCourse = async (req, res) => {
       data: singleCourse,
     });
   } catch (error) {
-    res.status(500).json({ message: "Server Error" });
+    res.status(500).json({ message: "Server Error" ,error:error.message });
   }
 };
 

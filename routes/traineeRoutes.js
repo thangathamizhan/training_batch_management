@@ -9,8 +9,8 @@ traineeRoutes.post("/createTrainee",auth, applyForCourse);
 traineeRoutes.get("/getTrainees",auth,authorize("ADMIN"), getAllTrainees
 
 );
-traineeRoutes.get('/getTraineeById/:ID',auth,authorize("ADMIN"),getTraineeById)
-traineeRoutes.get('/getTraineeByCourse',auth,authorize("ADMIN"),getTraineesByCourse)
-traineeRoutes.patch("/updateTrainee/:id",auth,authorize("ADMIN"), updateTrainee);
-traineeRoutes.delete("/deleteTrainee/:id",auth,authorize("ADMIN"), deleteTrainee);
+traineeRoutes.get('/getTraineeById/:ID',auth,getTraineeById)
+traineeRoutes.get('/getTraineeByCourse',auth,getTraineesByCourse)
+traineeRoutes.patch("/updateTrainee/:id",auth, updateTrainee);
+traineeRoutes.delete("/deleteTrainee/:id",auth, deleteTrainee);
 
