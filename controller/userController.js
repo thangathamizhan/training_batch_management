@@ -105,7 +105,7 @@ try {
 
    const token =generateToken({id:findUser._id,role:findUser.role,email:findUser.email})
 
-   res.status(200).json({message:"login success",token,user:{id:findUser._id,role:findUser.role,email:findUser.email}})
+   res.status(200).json({message:"login success",token,user:{id:findUser._id,role:findUser.role,email:findUser.email,name:findUser.userName,phoneNumber:findUser.phoneNumber}})
 
    
 } catch (error) {
