@@ -55,7 +55,7 @@
     };
  
     try {
-      const res = await fetch("http://localhost:5000/api/register", {
+      const res = await fetch("http://localhost:5000/api/users/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
@@ -67,6 +67,10 @@
       alert(result.message);
       //alert(result);
       //console.log(result);
+      setTimeout(()=>{
+       window .location.href  ="login.html" 
+ 
+      },1000)
  
     } catch (err) {
       console.error("Error:", err);
