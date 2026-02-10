@@ -258,7 +258,7 @@ function loadForm(type) {
 
 }*/
 // Assuming you already have `content` div and type check
-if (type === "trainer") {
+else if (type === "trainer") {
   document.getElementById("pageTitle").innerText = "Add Trainer";
   content.innerHTML = `
     <div class="form-card">
@@ -289,16 +289,7 @@ if (type === "trainer") {
                 <label>Skills</label>
                 <div class="multi-select">
                     <input type="text" id="trainerSkillSet" placeholder="Select Skills" readonly>
-                    <div class="dropdown-options" id="skillDropdown">
-                        <label><input type="checkbox" value="Java"> Java</label>
-                        <label><input type="checkbox" value="Python"> Python</label>
-                        <label><input type="checkbox" value="Data Science"> Data Science</label>
-                        <label><input type="checkbox" value="Cyber Security"> Cyber Security</label>
-                        <label><input type="checkbox" value="DevOps"> DevOps</label>
-                        <label><input type="checkbox" value="Cloud Computing"> Cloud Computing</label>
-                        <label><input type="checkbox" value="SAP S/4 HANA"> SAP S/4 HANA</label>
-                        <label><input type="checkbox" value="SAP BTP"> SAP BTP</label>
-                    </div>
+                    <div class="dropdown-options" id="skillDropdown"></div>
                 </div>
             </div>
 
@@ -319,28 +310,66 @@ if (type === "trainer") {
             </div>
 
             <button type="submit" class="btn-save">Save</button>
-
         </form>
     </div>
   `;
 
-  // Multi-select skills logic
   const skillInput = document.getElementById("trainerSkillSet");
   const skillDropdown = document.getElementById("skillDropdown");
+  let skillData = []; // store all skills fetched from backend
 
+  const token = localStorage.getItem("token");
+  if (!token) {
+    alert("❌ No token found. Please login first.");
+    return;
+  }
+
+  // Fetch all skills once
+  const fetchSkills = async () => {
+    try {
+      const response = await fetch("http://localhost:5000/api/admin/skill/getAllskills", {
+        headers: { "Authorization": `Bearer ${token}` }
+      });
+      const result = await response.json();
+      if (!response.ok) {
+        alert(result.message || "Could not fetch skills");
+        return;
+      }
+
+      skillData = result.data; // store full skill objects
+      skillDropdown.innerHTML = "";
+
+      skillData.forEach(skill => {
+        const label = document.createElement("label");
+        label.innerHTML = `<input type="checkbox" value="${skill._id}"> ${skill.skillName}`;
+        skillDropdown.appendChild(label);
+      });
+    } catch (err) {
+      console.error("Fetch error:", err);
+      alert("❌ Unable to fetch skills from backend");
+    }
+  };
+
+  fetchSkills();
+
+  // Toggle dropdown on click
   skillInput.addEventListener("click", () => {
     skillDropdown.style.display = skillDropdown.style.display === "block" ? "none" : "block";
   });
 
-  skillDropdown.querySelectorAll("input[type=checkbox]").forEach(chk => {
-    chk.addEventListener("change", () => {
-      const selected = Array.from(skillDropdown.querySelectorAll("input[type=checkbox]:checked"))
-                            .map(c => c.value);
-      skillInput.value = selected.join(", ");
-    });
+  // Close dropdown when clicking outside
+  document.addEventListener("click", (e) => {
+    if (!e.target.closest(".multi-select")) skillDropdown.style.display = "none";
   });
 
-  // Form submission logic
+  // Update input with selected skill names
+  skillDropdown.addEventListener("change", () => {
+    const selectedNames = Array.from(skillDropdown.querySelectorAll("input[type=checkbox]:checked"))
+                               .map(cb => cb.nextSibling.textContent.trim());
+    skillInput.value = selectedNames.join(", ");
+  });
+
+  // Submit trainer form
   const trainerForm = document.getElementById("trainerForm");
   trainerForm.addEventListener("submit", async (e) => {
     e.preventDefault();
@@ -349,11 +378,12 @@ if (type === "trainer") {
     const email = document.getElementById("trainerEmail").value.trim();
     const password = document.getElementById("trainerPassword").value.trim();
     const phoneNumber = document.getElementById("trainerPhone").value.trim();
-    const skills = Array.from(skillDropdown.querySelectorAll("input[type=checkbox]:checked")).map(c => c.value);
+    const selectedSkills = Array.from(skillDropdown.querySelectorAll("input[type=checkbox]:checked"))
+                                .map(cb => cb.value); // send IDs
     const proficiency = document.getElementById("courseLevel").value;
     const experience = Number(document.getElementById("experience").value);
 
-    if (!trainerName || !email || !password || !phoneNumber || skills.length === 0 || !proficiency || !experience) {
+    if (!trainerName || !email || !password || !phoneNumber || selectedSkills.length === 0 || !proficiency || !experience) {
       Swal.fire({
         icon: 'warning',
         title: 'Missing Fields',
@@ -365,8 +395,19 @@ if (type === "trainer") {
     try {
       const response = await fetch("http://localhost:5000/api/admin/trainer/createTrainer", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ trainerName, email, password, phoneNumber, skills, proficiency, experience })
+        headers: { 
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          trainerName,
+          email,
+          password,
+          phoneNumber,
+          skills: selectedSkills,
+          proficiency,
+          experience
+        })
       });
 
       const data = await response.json();
@@ -379,13 +420,14 @@ if (type === "trainer") {
         Swal.fire({ icon: 'error', title: 'Error', text: data.message || 'Something went wrong' });
         console.error("Backend error:", data);
       }
-
-    } catch (error) {
-      console.error("Connection error:", error);
+    } catch (err) {
+      console.error("Server error:", err);
       Swal.fire({ icon: 'error', title: 'Server Error', text: 'Unable to connect to backend' });
     }
   });
 }
+
+
 
  /* else if (type === "course") {
     document.getElementById("pageTitle").innerText = "Add Course";
@@ -531,26 +573,15 @@ skillDropdown.addEventListener("change", function () {
 */
  
 else if (type === "course") {
-    document.getElementById("pageTitle").innerText = "Add Course";
-    content.innerHTML = `
+  document.getElementById("pageTitle").innerText = "Add Course";
+  content.innerHTML = `
     <div class="form-card">
         <h3>Add Course</h3>
         <form class="admin-form" id="courseForm">
 
-            <!-- Course Name Dropdown -->
             <div class="form-group">
-                <label>Course Offered</label>
-                <select id="courseName" required>
-                    <option value="">Select Course</option>
-                    <option value="Java Full Stack">Java Full Stack</option>
-                    <option value="Python Full Stack">Python Full Stack</option>
-                    <option value="Data Science">Data Science</option>
-                    <option value="Cyber Security">Cyber Security</option>
-                    <option value="DevOps">DevOps</option>
-                    <option value="Cloud Computing">Cloud Computing</option>
-                    <option value="SAP S/4 HANA">SAP S/4 HANA</option>
-                    <option value="SAP BTP">SAP BTP</option>
-                </select>
+                <label>Course Name</label>
+                <input type="text" id="courseName" placeholder="Enter Course Name" required>
             </div>
 
             <div class="form-group">
@@ -575,87 +606,118 @@ else if (type === "course") {
 
             <div class="form-group">
                 <label>Skills</label>
-                <div id="skillDropdown">
-                    <label>
-                        <input type="checkbox" value="698a8c331d9a9215099d13ea"> Core Java
-                    </label>
-                    <label>
-                        <input type="checkbox" value="698a8ca61d9a9215099d13ec"> Spring Boot
-                    </label>
-                    <label>
-                        <input type="checkbox" value="698a8cc71d9a9215099d13ee"> Hibernate
-                    </label>
-                    <label>
-                        <input type="checkbox" value="698a8ce41d9a9215099d13f0"> Docker
-                    </label>
-                    <label>
-                        <input type="checkbox" value="698a8d031d9a9215099d13f2"> AWS
-                    </label>
+                <div class="multi-select">
+                    <input type="text" id="courseSkillSet" placeholder="Select Skills" readonly>
+                    <div class="dropdown-options" id="skillDropdown"></div>
                 </div>
             </div>
 
             <button type="submit" class="btn-save">Save</button>
         </form>
     </div>
-    `;
+  `;
 
-    const form = document.getElementById("courseForm");
+  const skillInput = document.getElementById("courseSkillSet");
+  const skillDropdown = document.getElementById("skillDropdown");
 
-    form.addEventListener("submit", async function (e) {
-        e.preventDefault();
+  // Fetch skills dynamically from backend
+  skillInput.addEventListener("click", async () => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      alert("❌ No token found. Please login first.");
+      return;
+    }
 
-        // collect selected skill ids
-        const checkedSkills = Array.from(
-            document.querySelectorAll("#skillDropdown input:checked")
-        ).map(cb => cb.value);
+    try {
+      const response = await fetch("http://localhost:5000/api/admin/skill/getAllskills", {
+        headers: { "Authorization": `Bearer ${token}` }
+      });
+      const result = await response.json();
 
-        const courseData = {
-            courseName: document.getElementById("courseName").value,
-            description: document.getElementById("courseDescription").value,
-            duration: document.getElementById("courseDuration").value,
-            level: document.getElementById("courseLevel").value,
-            skills: checkedSkills
-        };
+      if (!response.ok) {
+        alert(result.message || "Could not fetch skills");
+        return;
+      }
 
-        try {
-            const response = await fetch(  "http://localhost:5000/api/admin/course/createCourse",
-                {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify(courseData),
-                });
-                
+      skillDropdown.innerHTML = ""; // clear old options
 
-            const result = await response.json();
+      result.data.forEach(skill => {
+        const label = document.createElement("label");
+        label.innerHTML = `<input type="checkbox" value="${skill._id}"> ${skill.skillName}`;
+        skillDropdown.appendChild(label);
+      });
 
-            if (response.ok) {
-                Swal.fire({
-                    icon: "success",
-                    title: "Success",
-                    text: "Course created successfully!",
-                    confirmButtonColor: "#3085d6"
-                }).then(() => {
-                    form.reset();
-                    loadForm("trainerSkill");
-                });
-            } else {
-                Swal.fire({
-                    icon: "error",
-                    title: "Error",
-                    text: result.message
-                });
-            }
-        } catch (error) {
-            Swal.fire({
-                icon: "error",
-                title: "Server Error",
-                text: "Could not connect to server"
-            });
-        }
-    });
+      skillDropdown.style.display = "block"; // show dropdown
+    } catch (err) {
+      console.error("Fetch error:", err);
+      alert("❌ Unable to fetch skills from backend");
+    }
+  });
+
+  // Close dropdown when clicking outside
+  document.addEventListener("click", (e) => {
+    if (!e.target.closest(".multi-select")) {
+      skillDropdown.style.display = "none";
+    }
+  });
+
+  // Update input value when selecting skills
+  skillDropdown.addEventListener("change", () => {
+    const selected = Array.from(skillDropdown.querySelectorAll("input[type=checkbox]:checked"))
+                          .map(cb => cb.nextSibling.textContent.trim());
+    skillInput.value = selected.join(", ");
+  });
+
+  // Course form submission
+  const courseForm = document.getElementById("courseForm");
+  courseForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const courseName = document.getElementById("courseName").value.trim();
+    const description = document.getElementById("courseDescription").value.trim();
+    const duration = document.getElementById("courseDuration").value.trim();
+    const level = document.getElementById("courseLevel").value;
+    const skills = Array.from(skillDropdown.querySelectorAll("input[type=checkbox]:checked"))
+                        .map(cb => cb.value);
+
+    if (!courseName || !description || !duration || !level || skills.length === 0) {
+      Swal.fire({
+        icon: 'warning',
+        title: 'Missing Fields',
+        text: 'Please fill in all fields including skills'
+      });
+      return;
+    }
+
+    const token = localStorage.getItem("token");
+
+    try {
+      const response = await fetch("http://localhost:5000/api/admin/course/createCourse", {
+        method: "POST",
+        headers: { 
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        },
+        body: JSON.stringify({ courseName, description, duration, level, skills })
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        Swal.fire({ icon: 'success', title: 'Success', text: data.message || 'Course created successfully' });
+        courseForm.reset();
+        skillInput.value = "";
+      } else {
+        Swal.fire({ icon: 'error', title: 'Error', text: data.message || 'Something went wrong' });
+        console.error("Backend error:", data);
+      }
+    } catch (error) {
+      console.error("Server error:", error);
+      Swal.fire({ icon: 'error', title: 'Server Error', text: 'Unable to connect to backend' });
+    }
+  });
 }
+
 
 
 
@@ -832,12 +894,18 @@ else if (type === "skill") {
       return;
     }
 
-    try {
-      const response = await fetch("http://localhost:5000/api/admin/skill/createSkill", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+    const token = localStorage.getItem("token");
+
+    console.log("token",token);
+    
+
+try {
+  const response = await fetch("http://localhost:5000/api/admin/skill/createSkill", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${token}`  // ✅ attach token here
+    },
         body: JSON.stringify({ skillName, description, category }),
       });
 
@@ -873,45 +941,179 @@ else if (type === "skill") {
 
 
     else if (type === "batch") {
-        document.getElementById("pageTitle").innerText = "Add Batch";
-        content.innerHTML = `
-        <div class="form-card">
-            <h3>Add Course Skills</h3>
-            <form class="admin-form">
+  document.getElementById("pageTitle").innerText = "Add Batch";
+  content.innerHTML = `
+    <div class="form-card">
+      <h3>Add Batch</h3>
+      <form id="batchForm" class="admin-form">
 
-                <div class="form-group">
-                    <label>Batch Name</label>
-                    <input type="text" placeholder="Enter Batch Name" required>
-                </div>
-                <div class="form-group">
-                    <label>Start Date</label>
-                    <input type="date" placeholder="Enter Start Date" required>
-                </div>
-                <div class="form-group">
-                    <label>End Date</label>
-                    <input type="date" placeholder="Enter End Date" required>
-                </div>
-                <div class="form-group">
-                    <label>Mode</label>
-                    <select required>
-                       <option value="">Select Level</option>
-                       <option value="Online">Online</option>
-                       <option value="Offline">Offline</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>Trainer Name</label>
-                    <input type="text" placeholder="Enter Trainer Name" required>
-                </div>
-                <div class="form-group">
-                    <label>Course Name</label>
-                    <input type="text" placeholder="Enter Course Name" required>
-                </div>
-
-                <button type="submit" class="btn-save">Save</button>
-
-            </form>
+        <div class="form-group">
+          <label>Batch Name</label>
+          <input type="text" id="batchName" placeholder="Enter Batch Name" required>
         </div>
-        `;
+
+        <div class="form-group">
+          <label>Start Date</label>
+          <input type="date" id="startDate" required>
+        </div>
+
+        <div class="form-group">
+          <label>End Date</label>
+          <input type="date" id="endDate" required>
+        </div>
+
+        <div class="form-group">
+          <label>Mode</label>
+          <select id="mode" required>
+            <option value="">Select Mode</option>
+            <option value="ONLINE">Online</option>
+            <option value="OFFLINE">Offline</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Trainer</label>
+          <input type="text" id="trainerField" placeholder="Select Trainer" readonly>
+          <div class="dropdown-options" id="trainerDropdown"></div>
+        </div>
+
+        <div class="form-group">
+          <label>Course</label>
+          <input type="text" id="courseField" placeholder="Select Course" readonly>
+          <div class="dropdown-options" id="courseDropdown"></div>
+        </div>
+
+        <button type="submit" class="btn-save">Save</button>
+      </form>
+    </div>
+  `;
+
+  const trainerField = document.getElementById("trainerField");
+  const trainerDropdown = document.getElementById("trainerDropdown");
+  const courseField = document.getElementById("courseField");
+  const courseDropdown = document.getElementById("courseDropdown");
+
+  const token = localStorage.getItem("token");
+  if (!token) {
+    alert("❌ No token found. Please login first.");
+    return;
+  }
+
+  // Fetch trainers
+  trainerField.addEventListener("click", async () => {
+    try {
+      const response = await fetch("http://localhost:5000/api/admin/trainer/getAllTrainer", {
+        headers: { "Authorization": `Bearer ${token}` }
+      });
+      const result = await response.json();
+      if (!response.ok) {
+        alert(result.message || "Could not fetch trainers");
+        return;
+      }
+
+      trainerDropdown.innerHTML = "";
+      result.data.forEach(trainer => {
+        const label = document.createElement("label");
+        label.innerHTML = `<input type="radio" name="trainer" value="${trainer._id}"> ${trainer.userId.userName}`;
+        trainerDropdown.appendChild(label);
+      });
+      trainerDropdown.style.display = "block";
+    } catch (err) {
+      console.error("Fetch trainer error:", err);
+      alert("❌ Unable to fetch trainers");
     }
+  });
+
+  // Fetch courses
+  courseField.addEventListener("click", async () => {
+    try {
+      const response = await fetch("http://localhost:5000/api/admin/course/getCourse", {
+        headers: { "Authorization": `Bearer ${token}` }
+      });
+      const result = await response.json();
+      if (!response.ok) {
+        alert(result.message || "Could not fetch courses");
+        return;
+      }
+
+      courseDropdown.innerHTML = "";
+      result.data.forEach(course => {
+        const label = document.createElement("label");
+        label.innerHTML = `<input type="radio" name="course" value="${course._id}"> ${course.courseName}`;
+        courseDropdown.appendChild(label);
+      });
+      courseDropdown.style.display = "block";
+    } catch (err) {
+      console.error("Fetch course error:", err);
+      alert("❌ Unable to fetch courses");
+    }
+  });
+
+  // Close dropdowns when clicking outside
+  document.addEventListener("click", (e) => {
+    if (!e.target.closest("#trainerField")) trainerDropdown.style.display = "none";
+    if (!e.target.closest("#courseField")) courseDropdown.style.display = "none";
+  });
+
+  // Update input when selecting trainer
+  trainerDropdown.addEventListener("change", () => {
+    const selected = trainerDropdown.querySelector("input[name=trainer]:checked");
+    if (selected) trainerField.value = selected.nextSibling.textContent.trim();
+  });
+
+  // Update input when selecting course
+  courseDropdown.addEventListener("change", () => {
+    const selected = courseDropdown.querySelector("input[name=course]:checked");
+    if (selected) courseField.value = selected.nextSibling.textContent.trim();
+  });
+
+  // Submit batch form
+  const batchForm = document.getElementById("batchForm");
+  batchForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const trainerId = trainerDropdown.querySelector("input[name=trainer]:checked")?.value;
+    const courseId = courseDropdown.querySelector("input[name=course]:checked")?.value;
+
+    const batchData = {
+      batchName: document.getElementById("batchName").value.trim(),
+      startDate: document.getElementById("startDate").value,
+      endDate: document.getElementById("endDate").value,
+      mode: document.getElementById("mode").value,
+      trainerId,
+      courseId
+    };
+
+    if (!batchData.batchName || !batchData.startDate || !batchData.endDate || !batchData.mode || !trainerId || !courseId) {
+      Swal.fire({ icon: "warning", title: "Missing Fields", text: "Please fill in all fields" });
+      return;
+    }
+
+    try {
+      const response = await fetch("http://localhost:5000/api/admin/batch/createBatch", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        },
+        body: JSON.stringify(batchData)
+      });
+
+      const result = await response.json();
+
+      if (response.ok) {
+        Swal.fire({ icon: "success", title: "Success", text: result.message });
+        batchForm.reset();
+        trainerField.value = "";
+        courseField.value = "";
+      } else {
+        Swal.fire({ icon: "error", title: "Error", text: result.message });
+      }
+    } catch (error) {
+      console.error("Batch submit error:", error);
+      Swal.fire({ icon: "error", title: "Server Error", text: "Could not create batch" });
+    }
+  });
+}
+
 }

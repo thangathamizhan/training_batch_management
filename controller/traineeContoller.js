@@ -1,7 +1,8 @@
 
 import { Trainee } from "../model/traineeSchema.js";
-import { User } from "../model/userSchema.js";           
+          
 import { CourseApplication } from "../model/courseApplication.js";    
+import { userSchema } from "../model/userSchema.js";
 
 export const applyForCourse = async (req, res) => {
   try {
@@ -15,12 +16,15 @@ export const applyForCourse = async (req, res) => {
     } = req.body;
 
     
-    if(!trainee_id || !qualification || !gender || !address || !courseId){
-      return res.status(400).json({ message: "All fields are required" });
-    }
+    // if(!trainee_id || !qualification || !gender || !address || !courseId){
+    //   return res.status(400).json({ message: "All fields are required" });
+    // }
 
-    
-    const user = await User.findOne({ trainee_id });
+       console.log("trainee id",trainee_id);
+       console.log("courseId",courseId);
+       
+       
+    const user = await userSchema.findById( trainee_id );
     if (!user){
       return res.status(404).json({ message: "User not found" });
     }
@@ -36,7 +40,8 @@ export const applyForCourse = async (req, res) => {
         phone: user.phoneNumber,
         qualification,
         gender,
-        address  
+        address, 
+        courseId 
       });
     }          
 
@@ -53,7 +58,7 @@ export const applyForCourse = async (req, res) => {
     const application = await CourseApplication.create({
       traineeId: trainee._id,
       courseId,
-      mode
+      
     });
 
     

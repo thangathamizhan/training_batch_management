@@ -1,6 +1,7 @@
 import { Trainer } from "../model/TranierSchema.js"; 
 import { userSchema } from "../model/userSchema.js";
 import { Skill } from "../model/skillSchema.js";
+
 export const createTrainer = async (req, res) => {
   try {
     const { trainerName, email, password, phoneNumber, skills, proficiency, experience } = req.body;
@@ -20,22 +21,21 @@ export const createTrainer = async (req, res) => {
     const newUser = await userSchema.create({
       userName: trainerName,
       email,
-      password, // ideally hash password here
+      password, // ideally hash password
       phoneNumber,
       role: "TRAINER"
     });
 
-    // 4️⃣ Map skill names to ObjectIds
-    const skillDocs = await Skill.find({ skillName: { $in: skills } }); // fetch skill docs that match names
-    if (!skillDocs || skillDocs.length === 0) {
+    // 4️⃣ Validate skill IDs (optional, just to make sure they exist)
+    const validSkills = await Skill.find({ _id: { $in: skills } });
+    if (!validSkills || validSkills.length === 0) {
       return res.status(400).json({ message: "No valid skills found" });
     }
-    const skillIds = skillDocs.map(s => s._id); // extract _id array
 
     // 5️⃣ Create trainer
     const trainer = await Trainer.create({
       userId: newUser._id,
-      skillS: skillIds, // <-- now this is correct ObjectId array
+      skillS: validSkills.map(s => s._id), // store IDs directly
       proficiency,
       experience
     });
@@ -57,6 +57,7 @@ export const createTrainer = async (req, res) => {
     res.status(500).json({ message: "Server Error", error: error.message });
   }
 };
+
 export const getAllTrainers = async (req, res) => {
   try {
     const trainers = await Trainer.find()
