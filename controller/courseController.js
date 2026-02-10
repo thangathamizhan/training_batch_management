@@ -1,142 +1,146 @@
-import { course } from "../model/courseSchema.js";
- 
- 
 
+import { course } from "../model/courseSchema.js";
+
+
+// CREATE COURSE
 export const createCourse = async (req, res) => {
   try {
     const { courseName, description, duration, level, skills } = req.body;
- 
-    if (!courseName || !description || !duration || !level || !skills) {
+
+    // validation
+    if (!courseName || !description || !duration || !level || !skills || skills.length === 0) {
       return res.status(400).json({
-        message: "Please fill all required fields"
+        message: "Please fill all fields including skills",
       });
     }
- 
+
+    // check duplicate course
     const existingCourse = await course.findOne({ courseName });
     if (existingCourse) {
-      return res.status(409).json({
-        message: "Course already exists"
+      return res.status(409).json({ message: "Course already exists" });
+    }
+
+    // validate skill ObjectIds
+    const validSkills = skills.every(id =>
+      mongoose.Types.ObjectId.isValid(id)
+    );
+
+    if (!validSkills) {
+      return res.status(400).json({
+        message: "Invalid skill IDs",
       });
     }
- 
+
+    // create course
     const courseDetails = await course.create({
       courseName,
       description,
       duration,
       level,
-      skills
+      skills,
     });
- 
+
     res.status(201).json({
       message: "Course created successfully",
-      data: courseDetails
+      data: courseDetails,
     });
- 
   } catch (error) {
-    console.log(error);
-    res.status(500).json({ message: "Server error" });
+    res.status(500).json({
+      message: "Server error",
+      error: error.message,
+    });
   }
 };
- 
- 
- 
+
 // GET ALL COURSES
 export const getCourse = async (req, res) => {
   try {
-    const allCourses = await course.find().populate("skills");
- 
-    if (!allCourses.length) {
-      return res.status(404).json({
-        message: "No course details found"
-      });
-    }
- 
+    const allCourse = await course.find().populate("skills");
+
     res.status(200).json({
       message: "Courses fetched successfully",
-      data: allCourses
+      data: allCourse,
     });
- 
   } catch (error) {
-    console.log(error.message);
-    res.status(500).json({ message: "Server error" });
+    res.status(500).json({ message: "Server Error" });
   }
 };
-// GET SINGLE COURSE BY ID
-export const getCourseById = async (req, res) => {
+
+// GET SINGLE COURSE
+export const getSingleCourse = async (req, res) => {
   try {
     const { id } = req.params;
- 
-    const singleCourse = await course
-      .findById(id)
-      .populate("skills");
- 
+
+    const singleCourse = await course.findById(id).populate("skills");
+
     if (!singleCourse) {
-      return res.status(404).json({
-        message: "Course not found"
-      });
+      return res.status(404).json({ message: "Course not found" });
     }
- 
+
     res.status(200).json({
-      message: "Course fetched successfully",
-      data: singleCourse
+      message: "Course fetched",
+      data: singleCourse,
     });
- 
   } catch (error) {
-    console.log(error);
-    res.status(500).json({ message: "Server error" });
+    res.status(500).json({ message: "Server Error" });
   }
 };
- 
- 
- 
+
 // UPDATE COURSE
 export const updateCourse = async (req, res) => {
   try {
     const { id } = req.params;
     const { courseName, description, duration, level, skills } = req.body;
- 
-    const existingCourse = await course.findById(id);
- 
-    if (!existingCourse) {
-      return res.status(404).json({
-        message: "Course not found"
-      });
+
+    if (skills) {
+      const validSkills = skills.every(skillId =>
+        mongoose.Types.ObjectId.isValid(skillId)
+      );
+
+      if (!validSkills) {
+        return res.status(400).json({ message: "Invalid skill IDs" });
+      }
     }
- 
-    if (courseName) existingCourse.courseName = courseName;
-    if (description) existingCourse.description = description;
-    if (duration) existingCourse.duration = duration;
-    if (level) existingCourse.level = level;
-    if (skills) existingCourse.skills = skills;
- 
-    await existingCourse.save();
- 
+
+    const updatedCourse = await course.findByIdAndUpdate(
+      id,
+      { courseName, description, duration, level, skills },
+      { new: true, runValidators: true }
+    );
+
+    if (!updatedCourse) {
+      return res.status(404).json({ message: "Course id not found" });
+    }
+
     res.status(200).json({
       message: "Course updated successfully",
-      data: existingCourse
+      data: updatedCourse,
     });
- 
   } catch (error) {
-    console.log(error);
-    res.status(500).json({ message: "Server error" });
+    res.status(500).json({ message: "Server Error" });
   }
 };
- 
- 
- 
+
 // DELETE COURSE
 export const deleteCourse = async (req, res) => {
   try {
     const { id } = req.params;
- 
+
     const deletedCourse = await course.findByIdAndDelete(id);
- 
+
     if (!deletedCourse) {
-      return res.status(404).json({
-        message: "Course not found"
-      });
+      return res.status(404).json({ message: "Course not found" });
     }
- 
+
+    res.status(200).json({
+      message: "Course deleted successfully",
+    });
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
     res.status(200).json({
       message: "Course deleted successfully"
     });
@@ -145,4 +149,4 @@ export const deleteCourse = async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 };
- 
+

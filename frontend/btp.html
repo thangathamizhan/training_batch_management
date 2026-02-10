@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>SAP BTP Course</title>
+  <link rel="stylesheet" href="./btp.css">
+<link rel="icon" href="./logo.png" type="image/png">
+
+</head>
+<body>
+
+
+  <section class="hero">
+    <div class="overlay">
+      <h1>SAP BTP (Business Technology Platform) Course</h1>
+      <p class="meta">Duration: 6 Months | Price: ₹65,000</p>
+      <button onclick="openForm()">Enroll Now</button>
+    </div>
+  </section>
+
+
+  <section class="section">
+    <h2>Course Overview</h2>
+    <p>
+      This SAP BTP course covers cloud-based platform services for integration, extension, and analytics. 
+      Students learn to develop, deploy, and manage enterprise applications using SAP BTP services, 
+      including database management, integration, AI, and advanced analytics. The course prepares learners 
+      for roles as SAP BTP developers and cloud architects.
+    </p>
+  </section>
+
+  <section class="section dark">
+    <h2>Course Syllabus</h2>
+
+    <div class="module">
+      <h3>Module 1: Introduction to SAP BTP</h3>
+      <p>Overview of SAP Business Technology Platform, services, architecture, and use cases.</p>
+    </div>
+
+    <div class="module">
+      <h3>Module 2: Cloud & Integration Services</h3>
+      <p>Integration suite, API management, workflow automation, and event-driven integration.</p>
+    </div>
+
+    <div class="module">
+      <h3>Module 3: Database & Data Management</h3>
+      <p>SAP HANA Cloud, data storage, data modeling, and database management practices.</p>
+    </div>
+
+    <div class="module">
+      <h3>Module 4: Application Development</h3>
+      <p>Developing applications using SAP BTP services, extension capabilities, and microservices.</p>
+    </div>
+
+    <div class="module">
+      <h3>Module 5: Analytics & AI Services</h3>
+      <p>SAP Analytics Cloud, AI/ML services, dashboarding, and predictive analytics in BTP.</p>
+    </div>
+
+    <div class="module">
+      <h3>Module 6: Real-Time Projects</h3>
+      <p>Hands-on projects for integration, application development, and deployment on SAP BTP.</p>
+    </div>
+
+  </section>
+
+  <section class="section">
+    <h2>Course Highlights</h2>
+
+    <div class="syllabus-item">
+      Hands-on SAP BTP training with cloud application development.
+    </div>
+
+    <div class="syllabus-item">
+      Real-time projects covering integration, analytics, and AI services.
+    </div>
+
+    <div class="syllabus-item">
+      Guidance from certified SAP professionals.
+    </div>
+
+    <div class="syllabus-item">
+      Mock assessments and SAP BTP certification preparation.
+    </div>
+
+    <div class="syllabus-item">
+      Placement support for SAP BTP developers and cloud architects.
+    </div>
+  </section>
+
+  <div class="popup" id="formPopup">
+    <div class="form-box">
+      <span class="close" onclick="closeForm()">×</span>
+      <h2>Course Enrollment Form</h2>
+
+      <form onsubmit="redirectPage(event)">
+        <input type="text" placeholder="Full Name" required>
+        <input type="email" placeholder="Email" required>
+        <input type="tel" placeholder="Phone Number" required>
+
+
+      <select required>
+        <option value="">Select Gender</option>
+        <option>Male</option>
+        <option>Female</option>
+        <option>Other</option>
+      </select>
+
+
+        <input type="text" placeholder="Qualification" required>
+        <input type="text" placeholder="Address" required>
+
+        <button type="submit">Submit</button>
+      </form>
+    </div>
+  </div>
+
+  <section class="section dark">
+    <h2>Who Can Enroll</h2>
+    <p>
+      This course is ideal for software developers, cloud architects, IT consultants, and SAP professionals 
+      aiming to specialize in SAP Business Technology Platform (BTP) services and enterprise cloud solutions.
+    </p>
+  </section>
+
+  <script src="./btp.js"></script>
+</body>
+</html>

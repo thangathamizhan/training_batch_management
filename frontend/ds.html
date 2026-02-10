@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Data Science Course</title>
+  <link rel="stylesheet" href="./ds.css">
+  <link rel="icon" href="./logo.png" type="image/png">
+</head>
+<body>
+
+  <section class="hero">
+    <div class="overlay">
+      <h1>Data Science Course</h1>
+      <p class="meta">Duration: 6 Months | Price: ₹55,000</p>
+      <button onclick="openForm()">Enroll Now</button>
+    </div>
+  </section>
+
+  <section class="section">
+    <h2>Course Overview</h2>
+    <p>
+      This Data Science course trains learners in data analysis, statistics, and 
+      machine learning using Python, R, and other tools. Students will work with 
+      real datasets, perform data cleaning, visualization, and predictive modeling. 
+      The program focuses on practical skills for data-driven decision making and 
+      prepares learners for roles like Data Analyst, Data Scientist, or Machine Learning Engineer.
+    </p>
+  </section>
+
+  <section class="section dark">
+    <h2>Course Syllabus</h2>
+
+    <div class="module">
+      <h3>Module 1: Python & R for Data Science</h3>
+      <p>Python basics, NumPy, Pandas, data structures, R programming essentials.</p>
+    </div>
+
+    <div class="module">
+      <h3>Module 2: Statistics & Probability</h3>
+      <p>Descriptive statistics, probability, hypothesis testing, inferential statistics.</p>
+    </div>
+
+    <div class="module">
+      <h3>Module 3: Data Visualization</h3>
+      <p>Matplotlib, Seaborn, Plotly, dashboards, reporting insights from data.</p>
+    </div>
+
+    <div class="module">
+      <h3>Module 4: Machine Learning</h3>
+      <p>Supervised and unsupervised learning, regression, classification, clustering.</p>
+    </div>
+
+    <div class="module">
+      <h3>Module 5: Advanced Analytics & Big Data</h3>
+      <p>Time series, NLP, recommendation systems, Spark, handling large datasets.</p>
+    </div>
+
+    <div class="module">
+      <h3>Module 6: Real-Time Projects</h3>
+      <p>End-to-end projects, deployment, and review of data science solutions.</p>
+    </div>
+  </section>
+
+
+  <section class="section">
+    <h2>Course Highlights</h2>
+
+    <div class="syllabus-item">
+      Hands-on Data Science curriculum with real datasets and projects.
+    </div>
+
+    <div class="syllabus-item">
+      Learn Python, R, machine learning, and data visualization techniques.
+    </div>
+
+    <div class="syllabus-item">
+      Guidance from experienced industry trainers and data scientists.
+    </div>
+
+    <div class="syllabus-item">
+      Interview preparation and mock assessments for data roles.
+    </div>
+
+    <div class="syllabus-item">
+      Placement assistance to start a career in Data Science.
+    </div>
+  </section>
+
+
+  <div class="popup" id="formPopup">
+    <div class="form-box">
+      <span class="close" onclick="closeForm()">×</span>
+      <h2>Course Enrollment Form</h2>
+
+      <form onsubmit="redirectPage(event)">
+        <input type="text" placeholder="Full Name" required>
+        <input type="email" placeholder="Email" required>
+        <input type="tel" placeholder="Phone Number" required>
+
+ 
+ 
+      <select required>
+        <option value="">Select Gender</option>
+        <option>Male</option>
+        <option>Female</option>
+        <option>Other</option>
+      </select>
+
+        <input type="text" placeholder="Qualification" required>
+        <input type="text" placeholder="Address" required>
+
+        <button type="submit">Submit</button>
+      </form>
+    </div>
+  </div>
+
+ 
+  <section class="section dark">
+    <h2>Who Can Enroll</h2>
+    <p>
+      This course is ideal for fresh graduates, working professionals, and career switchers 
+      who want to build a career in Data Science, analytics, or machine learning roles.
+    </p>
+  </section>
+
+  <script src="./ds.js"></script>
+</body>
+</html>

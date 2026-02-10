@@ -6,10 +6,10 @@ import { authorize } from "../middleware.js/role.js";
 
 const skilroute = express.Router();
 
-skilroute.post("/createSkills",auth,authorize("ADMIN"),createSkill); 
-skilroute.get("/getskills",auth,authorize("ADMIN"), getAllSkills);
-skilroute.get("/getskillById/:id",auth,authorize("ADMIN"), getSkillById);
-skilroute.patch("/updateSkills/:id",auth,authorize("ADMIN"), updateSkill);
-skilroute.delete("/deleteSkills/:id",auth,authorize("ADMIN"), deleteSkill);
+skilroute.post("/createSkill",createSkill); 
+skilroute.get("/getAllskills", getAllSkills);
+skilroute.get("/getskillById/:id", getSkillById);
+skilroute.patch("/updateSkills/:id", updateSkill);
+skilroute.delete("/deleteSkills/:id", deleteSkill);
 
 export default skilroute;
