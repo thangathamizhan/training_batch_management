@@ -56,7 +56,7 @@ function loadForm(type) {
         </div> 
     `;
 }
-else if (type === "trainer") {
+/*else if (type === "trainer") {
     document.getElementById("pageTitle").innerText = "Add Trainer";
     content.innerHTML = `
     <div class="form-card">
@@ -89,7 +89,7 @@ else if (type === "trainer") {
                  <div class="multi-select">
                      <input type="text" id="trainerSkillSet" placeholder="Select Skills" readonly>
                      <div class="dropdown-options" id="skillDropdown">
-                       <label><input type="checkbox" value="Java"> Java</label>
+                       <label><input type="checkbox" value="Core Java"> Core Java</label>
                        <label><input type="checkbox" value="Python"> Python</label>
                        <label><input type="checkbox" value="Data Science"> Data Science</label>
                        <label><input type="checkbox" value="Cyber Security"> Cyber Security</label>
@@ -123,7 +123,7 @@ else if (type === "trainer") {
         </form>
     </div>
     `;
-    /*const skillInput = document.getElementById("trainerSkillSet");
+    const skillInput = document.getElementById("trainerSkillSet");
     const dropdown = document.getElementById("skillDropdown");
     const checkboxes = dropdown.querySelectorAll("input[type='checkbox']");
 
@@ -198,7 +198,7 @@ else if (type === "trainer") {
                 text: "Could not connect to server"
             });
         }
-    });*/
+    });
     form.addEventListener("submit", async function (e) {
     e.preventDefault();
 
@@ -256,11 +256,141 @@ else if (type === "trainer") {
     }
 });
 
+}*/
+// Assuming you already have `content` div and type check
+if (type === "trainer") {
+  document.getElementById("pageTitle").innerText = "Add Trainer";
+  content.innerHTML = `
+    <div class="form-card">
+        <h3>Add Trainer</h3>
+        <form id="trainerForm" class="admin-form">
+
+            <div class="form-group">
+                <label>Trainer Name</label>
+                <input type="text" id="trainerName" placeholder="Enter Trainer Name" required>
+            </div>
+
+            <div class="form-group">
+                <label>Email ID</label>
+                <input type="email" id="trainerEmail" placeholder="Enter Email" required>
+            </div>
+
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" id="trainerPassword" placeholder="Enter Password" required>
+            </div>
+
+            <div class="form-group">
+                <label>Phone Number</label>
+                <input type="text" id="trainerPhone" placeholder="Enter Phone Number" required>
+            </div>
+
+            <div class="form-group">
+                <label>Skills</label>
+                <div class="multi-select">
+                    <input type="text" id="trainerSkillSet" placeholder="Select Skills" readonly>
+                    <div class="dropdown-options" id="skillDropdown">
+                        <label><input type="checkbox" value="Java"> Java</label>
+                        <label><input type="checkbox" value="Python"> Python</label>
+                        <label><input type="checkbox" value="Data Science"> Data Science</label>
+                        <label><input type="checkbox" value="Cyber Security"> Cyber Security</label>
+                        <label><input type="checkbox" value="DevOps"> DevOps</label>
+                        <label><input type="checkbox" value="Cloud Computing"> Cloud Computing</label>
+                        <label><input type="checkbox" value="SAP S/4 HANA"> SAP S/4 HANA</label>
+                        <label><input type="checkbox" value="SAP BTP"> SAP BTP</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Proficiency</label>
+                <select id="courseLevel" required>
+                    <option value="">Select Level</option>
+                    <option value="Beginner">Beginner</option>
+                    <option value="Intermediate">Intermediate</option>
+                    <option value="Advanced">Advanced</option>
+                    <option value="Expert">Expert</option>
+                </select>            
+            </div>
+
+            <div class="form-group">
+                <label>Experience (Years)</label>
+                <input type="number" id="experience" placeholder="Enter Experience in Years" required>
+            </div>
+
+            <button type="submit" class="btn-save">Save</button>
+
+        </form>
+    </div>
+  `;
+
+  // Multi-select skills logic
+  const skillInput = document.getElementById("trainerSkillSet");
+  const skillDropdown = document.getElementById("skillDropdown");
+
+  skillInput.addEventListener("click", () => {
+    skillDropdown.style.display = skillDropdown.style.display === "block" ? "none" : "block";
+  });
+
+  skillDropdown.querySelectorAll("input[type=checkbox]").forEach(chk => {
+    chk.addEventListener("change", () => {
+      const selected = Array.from(skillDropdown.querySelectorAll("input[type=checkbox]:checked"))
+                            .map(c => c.value);
+      skillInput.value = selected.join(", ");
+    });
+  });
+
+  // Form submission logic
+  const trainerForm = document.getElementById("trainerForm");
+  trainerForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const trainerName = document.getElementById("trainerName").value.trim();
+    const email = document.getElementById("trainerEmail").value.trim();
+    const password = document.getElementById("trainerPassword").value.trim();
+    const phoneNumber = document.getElementById("trainerPhone").value.trim();
+    const skills = Array.from(skillDropdown.querySelectorAll("input[type=checkbox]:checked")).map(c => c.value);
+    const proficiency = document.getElementById("courseLevel").value;
+    const experience = Number(document.getElementById("experience").value);
+
+    if (!trainerName || !email || !password || !phoneNumber || skills.length === 0 || !proficiency || !experience) {
+      Swal.fire({
+        icon: 'warning',
+        title: 'Missing Fields',
+        text: 'Please fill in all fields'
+      });
+      return;
+    }
+
+    try {
+      const response = await fetch("http://localhost:5000/api/admin/trainer/createTrainer", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ trainerName, email, password, phoneNumber, skills, proficiency, experience })
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        Swal.fire({ icon: 'success', title: 'Success', text: data.message || 'Trainer created successfully' });
+        trainerForm.reset();
+        skillInput.value = "";
+      } else {
+        Swal.fire({ icon: 'error', title: 'Error', text: data.message || 'Something went wrong' });
+        console.error("Backend error:", data);
+      }
+
+    } catch (error) {
+      console.error("Connection error:", error);
+      Swal.fire({ icon: 'error', title: 'Server Error', text: 'Unable to connect to backend' });
+    }
+  });
 }
-   else if (type === "course") {
+
+ /* else if (type === "course") {
     document.getElementById("pageTitle").innerText = "Add Course";
     content.innerHTML = `
-    <div class="form-card">
+   /* <div class="form-card">
         <h3>Add Course</h3>
         <form class="admin-form" id="courseForm">
 
@@ -398,6 +528,134 @@ skillDropdown.addEventListener("change", function () {
         }
     });
 }
+*/
+ 
+else if (type === "course") {
+    document.getElementById("pageTitle").innerText = "Add Course";
+    content.innerHTML = `
+    <div class="form-card">
+        <h3>Add Course</h3>
+        <form class="admin-form" id="courseForm">
+
+            <!-- Course Name Dropdown -->
+            <div class="form-group">
+                <label>Course Offered</label>
+                <select id="courseName" required>
+                    <option value="">Select Course</option>
+                    <option value="Java Full Stack">Java Full Stack</option>
+                    <option value="Python Full Stack">Python Full Stack</option>
+                    <option value="Data Science">Data Science</option>
+                    <option value="Cyber Security">Cyber Security</option>
+                    <option value="DevOps">DevOps</option>
+                    <option value="Cloud Computing">Cloud Computing</option>
+                    <option value="SAP S/4 HANA">SAP S/4 HANA</option>
+                    <option value="SAP BTP">SAP BTP</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Description</label>
+                <input type="text" id="courseDescription" placeholder="Enter Description" required>
+            </div>
+
+            <div class="form-group">
+                <label>Duration</label>
+                <input type="text" id="courseDuration" placeholder="Enter Duration" required>
+            </div>
+
+            <div class="form-group">
+                <label>Level</label>
+                <select id="courseLevel" required>
+                    <option value="">Select Level</option>
+                    <option value="Beginner">Beginner</option>
+                    <option value="Intermediate">Intermediate</option>
+                    <option value="Advanced">Advanced</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Skills</label>
+                <div id="skillDropdown">
+                    <label>
+                        <input type="checkbox" value="698a8c331d9a9215099d13ea"> Core Java
+                    </label>
+                    <label>
+                        <input type="checkbox" value="698a8ca61d9a9215099d13ec"> Spring Boot
+                    </label>
+                    <label>
+                        <input type="checkbox" value="698a8cc71d9a9215099d13ee"> Hibernate
+                    </label>
+                    <label>
+                        <input type="checkbox" value="698a8ce41d9a9215099d13f0"> Docker
+                    </label>
+                    <label>
+                        <input type="checkbox" value="698a8d031d9a9215099d13f2"> AWS
+                    </label>
+                </div>
+            </div>
+
+            <button type="submit" class="btn-save">Save</button>
+        </form>
+    </div>
+    `;
+
+    const form = document.getElementById("courseForm");
+
+    form.addEventListener("submit", async function (e) {
+        e.preventDefault();
+
+        // collect selected skill ids
+        const checkedSkills = Array.from(
+            document.querySelectorAll("#skillDropdown input:checked")
+        ).map(cb => cb.value);
+
+        const courseData = {
+            courseName: document.getElementById("courseName").value,
+            description: document.getElementById("courseDescription").value,
+            duration: document.getElementById("courseDuration").value,
+            level: document.getElementById("courseLevel").value,
+            skills: checkedSkills
+        };
+
+        try {
+            const response = await fetch(  "http://localhost:5000/api/admin/course/createCourse",
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(courseData),
+                });
+                
+
+            const result = await response.json();
+
+            if (response.ok) {
+                Swal.fire({
+                    icon: "success",
+                    title: "Success",
+                    text: "Course created successfully!",
+                    confirmButtonColor: "#3085d6"
+                }).then(() => {
+                    form.reset();
+                    loadForm("trainerSkill");
+                });
+            } else {
+                Swal.fire({
+                    icon: "error",
+                    title: "Error",
+                    text: result.message
+                });
+            }
+        } catch (error) {
+            Swal.fire({
+                icon: "error",
+                title: "Server Error",
+                text: "Could not connect to server"
+            });
+        }
+    });
+}
 
 
 
@@ -486,7 +744,7 @@ skillDropdown.addEventListener("change", function () {
 }
 
 
-    else if (type === "skill") {
+/*    else if (type === "skill") {
         document.getElementById("pageTitle").innerText = "Add Skill";
         content.innerHTML = `
         <div class="form-card">
@@ -520,7 +778,98 @@ skillDropdown.addEventListener("change", function () {
             </form>
         </div>
         `;
+    }*/
+   // Assuming you already have `content` div and type check
+else if (type === "skill") {
+  document.getElementById("pageTitle").innerText = "Add Skill";
+  content.innerHTML = `
+    <div class="form-card">
+        <h3>Add Skill</h3>
+        <form id="skillForm" class="admin-form">
+
+            <div class="form-group">
+                <label>Skill Name</label>
+                <input type="text" id="skillName" placeholder="Enter Skill Name" required>
+            </div>
+
+            <div class="form-group">
+                <label>Description</label>
+                <input type="text" id="description" placeholder="Enter Description" required>
+            </div>
+
+            <div class="form-group">
+                <label>Category</label>
+                <select id="category" required>
+                  <option value="">Select Category</option>
+                  <option value="Development">Development</option>
+                  <option value="Testing">Testing</option>
+                  <option value="DevOps">DevOps</option>
+                  <option value="Consultant">Consultant</option>
+                </select>
+            </div>
+
+            <button type="submit" class="btn-save">Save</button>
+
+        </form>
+    </div>
+  `;
+
+  // Add JS logic for form submission
+  const skillForm = document.getElementById("skillForm");
+  skillForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const skillName = document.getElementById("skillName").value.trim();
+    const description = document.getElementById("description").value.trim();
+    const category = document.getElementById("category").value;
+
+    if (!skillName || !description || !category) {
+      Swal.fire({
+        icon: 'warning',
+        title: 'Missing Fields',
+        text: 'Please fill in all fields',
+      });
+      return;
     }
+
+    try {
+      const response = await fetch("http://localhost:5000/api/admin/skill/createSkill", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ skillName, description, category }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        Swal.fire({
+          icon: 'success',
+          title: 'Success',
+          text: data.message || 'Skill created successfully',
+        });
+        skillForm.reset();
+      } else {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: data.message || 'Something went wrong',
+        });
+        console.error("Backend error:", data);
+      }
+
+    } catch (error) {
+      console.error("Connection error:", error);
+      Swal.fire({
+        icon: 'error',
+        title: 'Server Error',
+        text: 'Unable to connect to backend',
+      });
+    }
+  });
+}
+
 
 
     else if (type === "batch") {
