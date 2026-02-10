@@ -2,7 +2,7 @@
 import { course } from "../model/courseSchema.js";
 
 
-// CREATE COURSE
+
 export const createCourse = async (req, res) => {
   try {
     const { courseName, description, duration, level, skills } = req.body;
@@ -86,7 +86,7 @@ export const getSingleCourse = async (req, res) => {
   }
 };
 
-// UPDATE COURSE
+
 export const updateCourse = async (req, res) => {
   try {
     const { id } = req.params;
@@ -121,7 +121,7 @@ export const updateCourse = async (req, res) => {
   }
 };
 
-// DELETE COURSE
+
 export const deleteCourse = async (req, res) => {
   try {
     const { id } = req.params;
@@ -141,12 +141,5 @@ export const deleteCourse = async (req, res) => {
   }
 };
 
-    res.status(200).json({
-      message: "Course deleted successfully"
-    });
- 
-  } catch (error) {
-    res.status(500).json({ message: "Server error" });
-  }
-};
+  
 

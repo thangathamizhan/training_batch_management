@@ -3,97 +3,111 @@
 <head>
   <meta charset="UTF-8">
   <title>SAP S/4HANA Course</title>
-  <link rel="stylesheet" href="./sap.css">
+
   <link rel="icon" href="./logo.png" type="image/png">
+  <link rel="stylesheet" href="./sap.css">
 </head>
 <body>
 
+<section class="hero">
+  <div class="overlay"> 
+    <h1>SAP S/4HANA Course</h1>
+    <p class="meta">Duration: 6 Months | Price: ₹60,000</p>
+    <button onclick="openForm()">Enroll Now</button>
+  </div>
+</section>
 
-  <section class="hero">
-    <div class="overlay">
-      <h1>SAP S/4HANA Course</h1>
-      <p class="meta">Duration: 6 Months | Price: ₹60,000</p>
-      <button onclick="openForm()">Enroll Now</button>
-    </div>
-  </section>
+<section class="section">
+  <h2>Course Overview</h2>
+  <p>
+    This SAP S/4HANA course provides end-to-end training on SAP's next-generation ERP system. 
+    Students will learn finance, logistics, procurement, and analytics in S/4HANA, along with 
+    real-time system navigation, configuration, and reporting. The course prepares learners for 
+    SAP consultant roles and enterprise-level SAP S/4HANA implementation projects.
+  </p>
+</section>
 
+<section class="section dark">
+  <h2>Course Syllabus</h2>
 
-  <section class="section">
-    <h2>Course Overview</h2>
-    <p>
-      This SAP S/4HANA course provides end-to-end training on SAP's next-generation ERP system. 
-      Students will learn finance, logistics, procurement, and analytics in S/4HANA, along with 
-      real-time system navigation, configuration, and reporting. The course prepares learners for 
-      SAP consultant roles and enterprise-level SAP S/4HANA implementation projects.
-    </p>
-  </section>
+  <div class="module">
+    <h3>Module 1: Introduction to SAP S/4HANA</h3>
+    <p>Overview of SAP S/4HANA, system architecture, modules, and benefits.</p>
+  </div>
 
+  <div class="module">
+    <h3>Module 2: Finance & Accounting (FICO)</h3>
+    <p>General ledger, accounts payable, accounts receivable, asset accounting, and reporting.</p>
+  </div>
 
-  <section class="section dark">
-    <h2>Course Syllabus</h2>
+  <div class="module">
+    <h3>Module 3: Logistics & Supply Chain</h3>
+    <p>Materials management, production planning, inventory management, procurement processes.</p>
+  </div>
 
-    <div class="module">
-      <h3>Module 1: Introduction to SAP S/4HANA</h3>
-      <p>Overview of SAP S/4HANA, system architecture, modules, and benefits.</p>
-    </div>
+  <div class="module">
+    <h3>Module 4: SAP Analytics & Reporting</h3>
+    <p>Embedded analytics, dashboards, SAP Fiori apps, reporting tools, and KPIs.</p>
+  </div>
 
-    <div class="module">
-      <h3>Module 2: Finance & Accounting (FICO)</h3>
-      <p>General ledger, accounts payable, accounts receivable, asset accounting, and reporting.</p>
-    </div>
+  <div class="module">
+    <h3>Module 5: Implementation & Projects</h3>
+    <p>Configuration, project lifecycle, testing, deployment, and real-time project exercises.</p>
+  </div>
+</section>
 
-    <div class="module">
-      <h3>Module 3: Logistics & Supply Chain</h3>
-      <p>Materials management, production planning, inventory management, procurement processes.</p>
-    </div>
+<section class="section">
+  <h2>Course Highlights</h2>
 
-    <div class="module">
-      <h3>Module 4: SAP Analytics & Reporting</h3>
-      <p>Embedded analytics, dashboards, SAP Fiori apps, reporting tools, and KPIs.</p>
-    </div>
+  <div class="syllabus-item">Hands-on SAP S/4HANA training with real system navigation and projects.</div>
+  <div class="syllabus-item">Learn finance, logistics, and analytics modules in S/4HANA.</div>
+  <div class="syllabus-item">Guidance from experienced SAP professionals.</div>
+  <div class="syllabus-item">Mock assessments and SAP certification preparation.</div>
+  <div class="syllabus-item">Placement support for SAP consultant roles.</div>
+</section>
 
-    <div class="module">
-      <h3>Module 5: Implementation & Projects</h3>
-      <p>Configuration, project lifecycle, testing, deployment, and real-time project exercises.</p>
-    </div>
+<section class="section dark">
+  <h2>Who Can Enroll</h2>
+  <p>
+    This course is ideal for IT professionals, business consultants, finance and logistics 
+    professionals, and students aiming to become SAP S/4HANA consultants.
+  </p>
+</section>
 
-  </section>
+<!-- POPUP FORM -->
+<div class="popup" id="formPopup">
+  <div class="form-box">
+    <span class="close" onclick="closeForm()">×</span>
+    <h2>Course Enrollment Form</h2>
 
-  
-  <section class="section">
-    <h2>Course Highlights</h2>
+    <form onsubmit="redirectPage(event)">
+      <input 
+        type="text" 
+        id="fullName" 
+        placeholder="Full Name" 
+        required 
+        onfocus="autoFillName()" 
+        onchange="autoFillName()"
+      >
 
-    <div class="syllabus-item">
-      Hands-on SAP S/4HANA training with real system navigation and projects.
-    </div>
+      <input 
+        type="email" 
+        id="email" 
+        placeholder="Email" 
+        required
+        onfocus="autoFillEmail()" 
+        onchange="autoFillEmail()"
+      >
 
-    <div class="syllabus-item">
-      Learn finance, logistics, and analytics modules in S/4HANA.
-    </div>
-
-    <div class="syllabus-item">
-      Guidance from experienced SAP professionals.
-    </div>
-
-    <div class="syllabus-item">
-      Mock assessments and SAP certification preparation.
-    </div>
-
-    <div class="syllabus-item">
-      Placement support for SAP consultant roles.
-    </div>
-  </section>
-
-    <div class="popup" id="formPopup">
-    <div class="form-box">
-      <span class="close" onclick="closeForm()">×</span>
-      <h2>Course Enrollment Form</h2>
-
-      <form onsubmit="redirectPage(event)">
-        <input type="text" placeholder="Full Name" required>
-        <input type="email" placeholder="Email" required>
-        <input type="tel" placeholder="Phone Number" required>
-
+      <input 
+        type="tel" 
+        id="phone" 
+        placeholder="Phone Number" 
+        required
+        onfocus="autoFillPhone()" 
+        onchange="autoFillPhone()"
+      >
+                   
       <select required>
         <option value="">Select Gender</option>
         <option>Male</option>
@@ -101,23 +115,97 @@
         <option>Other</option>
       </select>
 
-        <input type="text" placeholder="Qualification" required>
-        <input type="text" placeholder="Address" required>
+      <input type="text" placeholder="Qualification" required>
+      <input type="text" placeholder="Address" required>
 
-        <button type="submit">Submit</button>
-      </form>
-    </div>
+      <button type="submit">Submit</button>
+    </form>
+
   </div>
+</div>
 
+<script>
+/* =========================
+   POPUP LOGIC
+========================= */
+function openForm() {
+  document.getElementById("formPopup").style.display = "flex";
+  autoFillAll();
+}
 
-  <section class="section dark">
-    <h2>Who Can Enroll</h2>
-    <p>
-      This course is ideal for IT professionals, business consultants, finance and logistics 
-      professionals, and students aiming to become SAP S/4HANA consultants.
-    </p>
-  </section>
+function closeForm() {
+  document.getElementById("formPopup").style.display = "none";
+}
 
-  <script src="./sap.js"></script>
+window.onclick = function (event) {
+  const popup = document.getElementById("formPopup");
+  if (event.target === popup) {
+    closeForm();
+  }
+};
+
+function redirectPage(event) {
+  event.preventDefault();
+  window.location.href = "login.html";
+}
+
+/* =========================
+   USER / TOKEN FETCH LOGIC
+========================= */
+
+function getUserFromStorage() {
+  const data = localStorage.getItem("user");
+  if (!data) return null;
+
+  try {
+    return JSON.parse(data); // JSON object
+  } catch (e) {
+    return decodeJWT(data); // JWT token
+  }
+}
+
+/* JWT Decoder */
+function decodeJWT(token) {
+  try {
+    const payload = token.split(".")[1];
+    const decoded = atob(payload);
+    return JSON.parse(decoded);
+  } catch (e) {
+    return null;
+  }
+}
+
+/* Auto Fill Functions */
+function autoFillName() {
+  const user = getUserFromStorage();
+  if (!user) return;
+
+  document.getElementById("fullName").value =
+    user.userName || user.name || user.fullName || "";
+}
+
+function autoFillEmail() {
+  const user = getUserFromStorage();
+  if (!user) return;
+
+  document.getElementById("email").value =
+    user.email || "";
+}
+
+function autoFillPhone() {
+  const user = getUserFromStorage();
+  if (!user) return;
+
+  document.getElementById("phone").value =
+    user.phoneNumber || user.phone || "";
+}
+
+function autoFillAll() {
+  autoFillName();
+  autoFillEmail();
+  autoFillPhone();
+}
+</script>
+
 </body>
 </html>

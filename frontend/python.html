@@ -3,109 +3,119 @@
 <head>
   <meta charset="UTF-8">
   <title>Python Full Stack Developer Course</title>
-<link rel="icon" href="./logo.png" type="image/png">
 
+  <link rel="icon" href="./logo.png" type="image/png">
   <link rel="stylesheet" href="python.css">
 </head>
 <body>
 
+<section class="hero">
+  <div class="overlay">
+    <h1>Python Full Stack Developer Course</h1>
+    <p class="meta">Duration: 6 Months | Price: ₹50,000</p>
+    <button onclick="openForm()">Enroll Now</button>
+  </div>
+</section>
 
-  <section class="hero">
-    <div class="overlay">
-      <h1>Python Full Stack Developer Course</h1>
-      <p class="meta">Duration: 6 Months | Price: ₹50,000</p>
-      <button onclick="openForm()">Enroll Now</button>
-    </div>
-  </section>
+<section class="section">
+  <h2>Course Overview</h2>
+  <p>
+    This Python Full Stack Developer course equips learners with complete knowledge of 
+    frontend and backend development using Python-based frameworks and technologies. 
+    The course covers Python fundamentals, object-oriented programming, Django, Flask, 
+    and web development practices. Students gain hands-on experience through real-time 
+    projects, preparing them for professional roles in software development. 
+    The curriculum is designed by industry experts to match current market demands 
+    and enhance coding, debugging, and application design skills.
+  </p>
+</section>
 
- 
-  <section class="section">
-    <h2>Course Overview</h2>
-    <p>
-      This Python Full Stack Developer course equips learners with complete knowledge of 
-      frontend and backend development using Python-based frameworks and technologies. 
-      The course covers Python fundamentals, object-oriented programming, Django, Flask, 
-      and web development practices. Students gain hands-on experience through real-time 
-      projects, preparing them for professional roles in software development. 
-      The curriculum is designed by industry experts to match current market demands 
-      and enhance coding, debugging, and application design skills.
-    </p>
-  </section>
+<section class="section dark">
+  <h2>Course Syllabus</h2>
 
+  <div class="module">
+    <h3>Module 1: Python Fundamentals</h3>
+    <p>Python basics, data types, loops, functions, OOP concepts, exception handling.</p>
+  </div>
 
-  <section class="section dark">
-    <h2>Course Syllabus</h2>
+  <div class="module">
+    <h3>Module 2: Advanced Python</h3>
+    <p>File handling, modules, decorators, generators, multithreading, Python libraries.</p>
+  </div>
 
-    <div class="module">
-      <h3>Module 1: Python Fundamentals</h3>
-      <p>Python basics, data types, loops, functions, OOP concepts, exception handling.</p>
-    </div>
+  <div class="module">
+    <h3>Module 3: Frontend Development</h3>
+    <p>HTML5, CSS3, JavaScript, responsive design, client-side validation.</p>
+  </div>
 
-    <div class="module">
-      <h3>Module 2: Advanced Python</h3>
-      <p>File handling, modules, decorators, generators, multithreading, Python libraries.</p>
-    </div>
+  <div class="module">
+    <h3>Module 4: Django & Flask</h3>
+    <p>Django core concepts, Flask microframework, REST APIs, MVC pattern, web apps.</p>
+  </div>
 
-    <div class="module">
-      <h3>Module 3: Frontend Development</h3>
-      <p>HTML5, CSS3, JavaScript, responsive design, client-side validation.</p>
-    </div>
+  <div class="module">
+    <h3>Module 5: Database & Backend Integration</h3>
+    <p>SQL, ORM, database design, CRUD operations, backend integration with Python.</p>
+  </div>
 
-    <div class="module">
-      <h3>Module 4: Django & Flask</h3>
-      <p>Django core concepts, Flask microframework, REST APIs, MVC pattern, web apps.</p>
-    </div>
+  <div class="module">
+    <h3>Module 6: Real-Time Project</h3>
+    <p>End-to-end web application development, deployment, and project review.</p>
+  </div>
+</section>
 
-    <div class="module">
-      <h3>Module 5: Database & Backend Integration</h3>
-      <p>SQL, ORM, database design, CRUD operations, backend integration with Python.</p>
-    </div>
+<section class="section">
+  <h2>Course Highlights</h2>
 
-    <div class="module">
-      <h3>Module 6: Real-Time Project</h3>
-      <p>End-to-end web application development, deployment, and project review.</p>
-    </div>
-  </section>
+  <div class="syllabus-item">Industry-focused Python Full Stack curriculum for practical projects.</div>
+  <div class="syllabus-item">Hands-on coding sessions with live examples and project-based learning.</div>
+  <div class="syllabus-item">Emphasis on Python, Django, Flask, frontend, and backend development.</div>
+  <div class="syllabus-item">Guidance from trainers with real industry experience.</div>
+  <div class="syllabus-item">Mock interviews and interview preparation support.</div>
+  <div class="syllabus-item">Placement assistance to help learners secure jobs in Python development.</div>
+</section>
 
- 
-  <section class="section">
-    <h2>Course Highlights</h2>
+<section class="section dark">
+  <h2>Who Can Enroll</h2>
+  <p>
+    This course is ideal for fresh graduates, final-year students, career switchers, 
+    and working professionals looking to build a career in Python Full Stack development.
+  </p>
+</section>
 
-    <div class="syllabus-item">
-      Industry-focused Python Full Stack curriculum for practical projects.
-    </div>
+<!-- POPUP FORM -->
+<div class="popup" id="formPopup">
+  <div class="form-box">
+    <span class="close" onclick="closeForm()">×</span>
+    <h2>Course Enrollment Form</h2>
 
-    <div class="syllabus-item">
-      Hands-on coding sessions with live examples and project-based learning.
-    </div>
+    <form onsubmit="redirectPage(event)">
+      <input 
+        type="text" 
+        id="fullName" 
+        placeholder="Full Name" 
+        required 
+        onfocus="autoFillName()" 
+        onchange="autoFillName()"
+      >
 
-    <div class="syllabus-item">
-      Emphasis on Python, Django, Flask, frontend, and backend development.
-    </div>
+      <input 
+        type="email" 
+        id="email" 
+        placeholder="Email" 
+        required
+        onfocus="autoFillEmail()" 
+        onchange="autoFillEmail()"
+      >
 
-    <div class="syllabus-item">
-      Guidance from trainers with real industry experience.
-    </div>
-
-    <div class="syllabus-item">
-      Mock interviews and interview preparation support.
-    </div>
-
-    <div class="syllabus-item">
-      Placement assistance to help learners secure jobs in Python development.
-    </div>
-  </section>
-
-  
-  <div class="popup" id="formPopup">
-    <div class="form-box">
-      <span class="close" onclick="closeForm()">×</span>
-      <h2>Course Enrollment Form</h2>
-
-      <form onsubmit="redirectPage(event)">
-        <input type="text" placeholder="Full Name" required>
-        <input type="email" placeholder="Email" required>
-        <input type="tel" placeholder="Phone Number" required>
+      <input 
+        type="tel" 
+        id="phone" 
+        placeholder="Phone Number" 
+        required
+        onfocus="autoFillPhone()" 
+        onchange="autoFillPhone()"
+      >
 
       <select required>
         <option value="">Select Gender</option>
@@ -114,22 +124,96 @@
         <option>Other</option>
       </select>
 
-        <input type="text" placeholder="Qualification" required>
-        <input type="text" placeholder="Address" required>
+      <input type="text" placeholder="Qualification" required>
+      <input type="text" placeholder="Address" required>
 
-        <button type="submit">Submit</button>
-      </form>
-    </div>
+      <button type="submit">Submit</button>
+    </form>
   </div>
+</div>
 
-  <section class="section dark">
-    <h2>Who Can Enroll</h2>
-    <p>
-      This course is ideal for fresh graduates, final-year students, career switchers, 
-      and working professionals looking to build a career in Python Full Stack development.
-    </p>
-  </section>
+<script>
+/* =========================
+   POPUP LOGIC
+========================= */
+function openForm() {
+  document.getElementById("formPopup").style.display = "flex";
+  autoFillAll();
+}
 
-  <script src="python.js"></script>
+function closeForm() {
+  document.getElementById("formPopup").style.display = "none";
+}
+
+window.onclick = function (event) {
+  const popup = document.getElementById("formPopup");
+  if (event.target === popup) {
+    closeForm();
+  }
+};
+
+function redirectPage(event) {
+  event.preventDefault();
+  window.location.href = "login.html";
+}
+
+/* =========================
+   USER / TOKEN FETCH LOGIC
+========================= */
+
+function getUserFromStorage() {
+  const data = localStorage.getItem("user");
+  if (!data) return null;
+
+  try {
+    return JSON.parse(data); // JSON object
+  } catch (e) {
+    return decodeJWT(data); // JWT token
+  }
+}
+
+/* JWT Decoder */
+function decodeJWT(token) {
+  try {
+    const payload = token.split(".")[1];
+    const decoded = atob(payload);
+    return JSON.parse(decoded);
+  } catch (e) {
+    return null;
+  }
+}
+
+/* Auto Fill Functions */
+function autoFillName() {
+  const user = getUserFromStorage();
+  if (!user) return;
+
+  document.getElementById("fullName").value =
+    user.userName || user.name || user.fullName || "";
+}
+
+function autoFillEmail() {
+  const user = getUserFromStorage();
+  if (!user) return;
+
+  document.getElementById("email").value =
+    user.email || "";
+}
+
+function autoFillPhone() {
+  const user = getUserFromStorage();
+  if (!user) return;
+
+  document.getElementById("phone").value =
+    user.phoneNumber || user.phone || "";
+}
+
+function autoFillAll() {
+  autoFillName();
+  autoFillEmail();
+  autoFillPhone();
+}
+</script>
+
 </body>
 </html>

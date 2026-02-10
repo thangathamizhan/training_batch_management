@@ -4,13 +4,10 @@
   <meta charset="UTF-8">
   <title>Java Full Stack Developer Course</title>
 
- 
   <link rel="icon" href="./logo.png" type="image/png">
-
   <link rel="stylesheet" href="./java.css">
 </head>
 <body>
-
 
 <section class="hero">
   <div class="overlay">
@@ -19,7 +16,6 @@
     <button onclick="openForm()">Enroll Now</button>
   </div>
 </section>
-
 
 <section class="section">
   <h2>Course Overview</h2>
@@ -60,10 +56,8 @@
   </div>
 </section>
 
-
 <section class="section">
   <h2>Course Highlights</h2>
-
   <div class="syllabus-item">Industry-oriented curriculum</div>
   <div class="syllabus-item">Hands-on real-time projects</div>
   <div class="syllabus-item">Interview & placement support</div>
@@ -77,17 +71,40 @@
   </p>
 </section>
 
-
+<!-- POPUP FORM -->
 <div class="popup" id="formPopup">
   <div class="form-box">
     <span class="close" onclick="closeForm()">×</span>
     <h2>Course Enrollment Form</h2>
 
     <form onsubmit="redirectPage(event)">
-      <input type="text" placeholder="Full Name" required>
-      <input type="email" placeholder="Email" required>
-      <input type="tel" placeholder="Phone Number" required>
+      <input 
+        type="text" 
+        id="fullName" 
+        placeholder="Full Name" 
+        required 
+        onfocus="autoFillName()" 
+        onchange="autoFillName()"
+      >
 
+      <input 
+        type="email" 
+        id="email" 
+        placeholder="Email" 
+        required
+        onfocus="autoFillEmail()" 
+        onchange="autoFillEmail()"
+      >
+
+      <input 
+        type="tel" 
+        id="phone" 
+        placeholder="Phone Number" 
+        required
+        onfocus="autoFillPhone()" 
+        onchange="autoFillPhone()"
+      >
+                   
       <select required>
         <option value="">Select Gender</option>
         <option>Male</option>
@@ -97,11 +114,102 @@
 
       <input type="text" placeholder="Qualification" required>
       <input type="text" placeholder="Address" required>
+
       <button type="submit">Submit</button>
     </form>
+
   </div>
 </div>
 
-<script src="./java.js"></script>
+<script>
+/* =========================
+   POPUP + COURSE ID LOGIC
+========================= */
+function openForm() {
+
+  // ✅ STORE COURSE ID
+  localStorage.setItem("courseId", "6989bdd57bc96536198a39b3");
+
+  console.log("Course ID stored:", localStorage.getItem("courseId"));
+
+  document.getElementById("formPopup").style.display = "flex";
+  autoFillAll();
+}
+
+function closeForm() {
+  document.getElementById("formPopup").style.display = "none";
+}
+
+window.onclick = function (event) {
+  const popup = document.getElementById("formPopup");
+  if (event.target === popup) {
+    closeForm();
+  }
+};
+
+function redirectPage(event) {
+  event.preventDefault();
+  window.location.href = "login.html";
+}
+
+/* =========================
+   USER / TOKEN FETCH LOGIC
+========================= */
+
+function getUserFromStorage() {
+  const data = localStorage.getItem("user");
+  if (!data) return null;
+
+  try {
+    return JSON.parse(data);
+  } catch (e) {
+    return decodeJWT(data);
+  }
+}
+
+/* JWT Decoder */
+function decodeJWT(token) {
+  try {
+    const payload = token.split(".")[1];
+    const decoded = atob(payload);
+    return JSON.parse(decoded);
+  } catch (e) {
+    return null;
+  }
+}
+
+/* Auto Fill Functions */
+function autoFillName() {
+  const user = getUserFromStorage();
+  if (!user) return;
+
+  document.getElementById("fullName").value =
+    user.userName || user.name || user.fullName || "";
+}
+
+function autoFillEmail() {
+  const user = getUserFromStorage();
+  if (!user) return;
+
+  document.getElementById("email").value =
+    user.email || "";
+}
+
+function autoFillPhone() {
+  const user = getUserFromStorage();
+  if (!user) return;
+
+  document.getElementById("phone").value =
+    user.phoneNumber || user.phone || "";
+}
+
+/* Auto fill all */
+function autoFillAll() {
+  autoFillName();
+  autoFillEmail();
+  autoFillPhone();
+}
+</script>
+
 </body>
 </html>
