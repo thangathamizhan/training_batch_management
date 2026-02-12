@@ -6,6 +6,7 @@ import { courseRoutes } from '../routes/courseRoutes.js'
 import { traineeRoutes } from '../routes/traineeRoutes.js'
 import { batchroutes } from '../routes/batchRoutes.js'
 import { assessmentRoutes } from '../routes/assessmentRoutes.js'
+import { feedbackRoutes } from '../routes/feedbackRoutes.js'
 
 export const centralRoute =express.Router()
 
@@ -17,3 +18,4 @@ centralRoute.use('/admin/skill',skilroute)
 centralRoute.use('/trainee/applycourse',traineeRoutes)
 centralRoute.use('/admin/batch',batchroutes)
 centralRoute.use('/assessment',assessmentRoutes)
+centralRoute.use('/feedback',feedbackRoutes);

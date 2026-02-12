@@ -48,7 +48,11 @@ export const updateAssessment = async(req,res)=>{
         const {id} = req.params;
         const updated = await assessment.findByIdAndUpdate(
             id,
-            req.body,
+            {
+             assessmentType,
+             totalMarks,
+             assessmentDate,
+            },
             {new: true}
         );
         if(!updated){

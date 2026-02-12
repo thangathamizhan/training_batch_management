@@ -1,25 +1,27 @@
 import  mongoose from 'mongoose'
  
 const feedbackschema = new mongoose.Schema({
-     trainee_id:{
+     traineeId:{
         type: mongoose.Schema.Types.ObjectId,
-        ref:"traineeSchema",
+        ref:"Trainee",
        required: true
      },
-     batch_id:{
-          type: mongoose.Schema.Types.ObjectId,
-        ref:"batch",
+     batchId:{
+         type: mongoose.Schema.Types.ObjectId,
+        ref:"Batch",
        required: true
      },
      rating:{
         type:Number,
-        require:true
+        required:true
      },
  comments:{
-        type:Number,
-        require:true
+        type:String,
+        required:true
      }
  
 })
+
+export const feedbackmodel= mongoose.model('feedback',feedbackschema)
 
 
