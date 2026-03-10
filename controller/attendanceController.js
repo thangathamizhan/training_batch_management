@@ -1,4 +1,4 @@
- 
+
 export const markAttendance = async (req, res) => {
   try {
     const { enrollment_id, batch_name, batch_start_date, session_date, status, remarks } = req.body;
